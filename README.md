@@ -14,6 +14,11 @@ This project uses Maven. I feel the project has pretty neat javadoc
 
 Todo:
 1. Write unit tests
-2. Enable findbugs and checkstyle
-3. Start giving buildable jars
-3. Improve javadoc
+
+2. Enable checkstyle and static code analysis
+
+3. Set up a proper continuous deployment pipeline
+
+4. Improve javadoc
+
+5. Clean up exception handling
