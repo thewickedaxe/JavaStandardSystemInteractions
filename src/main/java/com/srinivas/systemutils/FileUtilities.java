@@ -53,7 +53,6 @@ public class FileUtilities {
 	 * Read from a file.
 	 * 
 	 * @param path path to file to write to.
-	 * @param message content to write to file
 	 * @throws IOException when the file culd not be read
 	 * @return an Array of newline separated strings with the file contents
 	 */

@@ -27,12 +27,19 @@ public class Command {
 	
 	/* ******************************************************** */
 	
+	/**
+	 * Default Constructor.
+	 */
 	public Command() {
 		setStatus(ProcessCode.UNKNOWN);
 	}
 
 	/* ******************************************************** */
 	
+	/**
+	 * Constructor whic allows command instantiation.
+	 * @param command the command to execute
+	 */
 	public Command(String command) {
 		setCommand(command);
 		setStatus(ProcessCode.UNKNOWN);
@@ -42,6 +49,7 @@ public class Command {
 
 	/**
 	 * Returns the status code.
+	 * @return Process' status code
 	 */
 	public ProcessCode getStatus() {
 		return statusCode;
@@ -60,6 +68,7 @@ public class Command {
 
 	/**
 	 * Returns the command (to be) executed.
+	 * @return the command to be executed or executed
 	 */
 	public String getCommand() {
 		return m_cmd;
@@ -78,6 +87,7 @@ public class Command {
 
 	/**
 	 * Returns the output stream contents as an array of Strings
+	 * @return  an array of newline separated strings which is the process' output
 	 */
 	public String[] getOutput() {
 		return m_outputContents;
@@ -86,7 +96,7 @@ public class Command {
 	/* ******************************************************** */
 
 	/**
-	 * Set's the output stream contents as an array of Strings
+	 * Set's the output stream contents as an array of Strings (not advisable but convenient for unit tests)
 	 */
 	public void setOutput(final String[] contents) {
 		m_outputContents = contents;
@@ -96,6 +106,7 @@ public class Command {
 
 	/**
 	 * Returns the error stream contents as an array of Strings
+	 * @return  an array of newline separated strings which is the process' error stream
 	 */
 	public String[] getErrorContents() {
 		return m_errorContents;

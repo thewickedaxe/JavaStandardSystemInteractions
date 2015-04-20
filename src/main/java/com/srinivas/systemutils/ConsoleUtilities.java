@@ -16,14 +16,26 @@ public class ConsoleUtilities {
 	private static final String LINE_SEPARATOR = "\n";
 	private static final File ORIGIN_DIR = new File(
 			System.getProperty("user.dir"));
+	
+	/* ******************************************************** */	
+	/**
+	 * Checks correctness of String parameters.
+	 * @param value the String that must be verified
+	 */
+	private static void checkParam(final String value) {
+		if (value == null || value.equals("")) {
+			throw new IllegalArgumentException("Value cannot be null or empty");
+		}
+	}
 
-	/* ******************************************************** */
+	/* ******************************************************** */	
 	/**
 	 * Sets the working directory to execute commands in.
 	 * Makes the directory if it doesn't exist.
 	 * @param path the path to the directory
 	 */
 	public static void setWorkingDirectory(final String path) {
+		checkParam(path);
 		File executionPath = new File(path);
 		executionPath.mkdirs();
 		s_builder.directory(executionPath);
@@ -42,15 +54,15 @@ public class ConsoleUtilities {
 	/**
 	 * Capture a Process output.
 	 * 
-	 * @param p process whose output must be caught
+	 * @param process process whose output must be caught
 	 * @throws IOException when the stream could not be read
 	 * @return result an Array of strings separated by the newline character
 	 * containing the process output
 	 */
-	private static String[] gobbleOutputStream(final Process p)
+	private static String[] gobbleOutputStream(final Process process)
 			throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				p.getInputStream()));
+				process.getInputStream()));
 		StringBuilder builder = new StringBuilder();
 		String line = null;
 		while ((line = reader.readLine()) != null) {
@@ -67,15 +79,15 @@ public class ConsoleUtilities {
 	/**
 	 * Capture a Process error stream.
 	 * 
-	 * @param p process whose output must be caught
+	 * @param process process whose output must be caught
 	 * @throws IOException
 	 * @return result an Array of strings separated by the newline character
 	 * containing the process error stream
 	 */
-	private static String[] gobbleErrorStream(final Process p)
+	private static String[] gobbleErrorStream(final Process process)
 			throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				p.getErrorStream()));
+				process.getErrorStream()));
 		StringBuilder builder = new StringBuilder();
 		String line = null;
 		while ((line = reader.readLine()) != null) {
@@ -99,6 +111,7 @@ public class ConsoleUtilities {
 	 */
 	public static Command exec(final Command command) throws IOException,
 			InterruptedException {
+		checkParam(command.getCommand());
 		String cmdParts[] = command.getCommand().split(" ");
 		s_builder.command(cmdParts);
 		Process process = s_builder.start();
@@ -125,6 +138,7 @@ public class ConsoleUtilities {
 	 */
 	public static Command execDisregardingErrorStream(final Command command)
 			throws IOException, InterruptedException {
+		checkParam(command.getCommand());
 		String cmdParts[] = command.getCommand().split(" ");
 		s_builder.command(cmdParts);
 		Process process = s_builder.start();
@@ -146,6 +160,7 @@ public class ConsoleUtilities {
 	 */
 	public static Command execUnSafe(final Command command) throws IOException,
 			InterruptedException {
+		checkParam(command.getCommand());
 		String cmdParts[] = command.getCommand().split(" ");
 		s_builder.command(cmdParts);
 		Process process = s_builder.start();
@@ -172,6 +187,7 @@ public class ConsoleUtilities {
 	 */
 	public static Command execUnSafeDisregardingErrorStream(
 			final Command command) throws IOException, InterruptedException {
+		checkParam(command.getCommand());
 		String cmdParts[] = command.getCommand().split(" ");
 		s_builder.command(cmdParts);
 		Process process = s_builder.start();
@@ -189,6 +205,7 @@ public class ConsoleUtilities {
 	 */
 	// TODO: add verification
 	public static void sOut(final String message) {
+		checkParam(message);
 		System.out.println(message);
 	}
 	
@@ -201,6 +218,7 @@ public class ConsoleUtilities {
 	 */
 	// TODO: add verification
 	public static void sDump(final String message) {
+		checkParam(message);
 		System.out.print(message);
 	}
 
@@ -213,6 +231,7 @@ public class ConsoleUtilities {
 	 */
 	// TODO: add verification
 	public static void sErr(final String message) {
+		checkParam(message);
 		System.err.println(message);
 	}
 
