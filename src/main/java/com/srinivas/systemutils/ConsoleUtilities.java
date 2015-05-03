@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.srinivas.systemutils.exceptions.SystemInteractionException;
+
 /**
  * Class that executes console commands and gets and puts input and output.
  * 
@@ -16,11 +18,13 @@ public class ConsoleUtilities {
 	private static final String LINE_SEPARATOR = "\n";
 	private static final File ORIGIN_DIR = new File(
 			System.getProperty("user.dir"));
-	
-	/* ******************************************************** */	
+
+	/* ******************************************************** */
 	/**
 	 * Checks correctness of String parameters.
-	 * @param value the String that must be verified
+	 * 
+	 * @param value
+	 *            the String that must be verified
 	 */
 	private static void checkParam(final String value) {
 		if (value == null || value.equals("")) {
@@ -28,11 +32,13 @@ public class ConsoleUtilities {
 		}
 	}
 
-	/* ******************************************************** */	
+	/* ******************************************************** */
 	/**
-	 * Sets the working directory to execute commands in.
-	 * Makes the directory if it doesn't exist.
-	 * @param path the path to the directory
+	 * Sets the working directory to execute commands in. Makes the directory if
+	 * it doesn't exist.
+	 * 
+	 * @param path
+	 *            the path to the directory
 	 */
 	public static void setWorkingDirectory(final String path) {
 		checkParam(path);
@@ -40,24 +46,25 @@ public class ConsoleUtilities {
 		executionPath.mkdirs();
 		s_builder.directory(executionPath);
 	}
-	
+
 	/* ******************************************************** */
 	/**
-	 * Reset working dir
-	 * Makes the directory if it doesn't exist.
+	 * Reset working dir Makes the directory if it doesn't exist.
 	 */
 	public static void resetWorkingDirectory() {
 		s_builder.directory(ORIGIN_DIR);
 	}
-	
+
 	/* ******************************************************** */
 	/**
 	 * Capture a Process output.
 	 * 
-	 * @param process process whose output must be caught
-	 * @throws IOException when the stream could not be read
+	 * @param process
+	 *            process whose output must be caught
+	 * @throws IOException
+	 *             when the stream could not be read
 	 * @return result an Array of strings separated by the newline character
-	 * containing the process output
+	 *         containing the process output
 	 */
 	private static String[] gobbleOutputStream(final Process process)
 			throws IOException {
@@ -79,10 +86,11 @@ public class ConsoleUtilities {
 	/**
 	 * Capture a Process error stream.
 	 * 
-	 * @param process process whose output must be caught
+	 * @param process
+	 *            process whose output must be caught
 	 * @throws IOException
 	 * @return result an Array of strings separated by the newline character
-	 * containing the process error stream
+	 *         containing the process error stream
 	 */
 	private static String[] gobbleErrorStream(final Process process)
 			throws IOException {
@@ -105,19 +113,26 @@ public class ConsoleUtilities {
 	 * Method will execute a system command. Fails when command writes to error
 	 * stream.
 	 * 
-	 * @param command A command object to execute
+	 * @param command
+	 *            A command object to execute
 	 * @return command the command with it's execution details set.
-	 * @throws IOException when the process builder cannot execute the command
+	 * @throws IOException
+	 *             when the process builder cannot execute the command
+	 * @throws SystemInteractionException
 	 */
-	public static Command exec(final Command command) throws IOException,
-			InterruptedException {
+	public static Command exec(final Command command)
+			throws SystemInteractionException {
 		checkParam(command.getCommand());
 		String cmdParts[] = command.getCommand().split(" ");
 		s_builder.command(cmdParts);
-		Process process = s_builder.start();
-		process.waitFor();
-		command.setOutput(gobbleOutputStream(process));
-		command.setErrorContents(gobbleErrorStream(process));
+		try {
+			Process process = s_builder.start();
+			process.waitFor();
+			command.setOutput(gobbleOutputStream(process));
+			command.setErrorContents(gobbleErrorStream(process));
+		} catch (IOException | InterruptedException e) {
+			throw new SystemInteractionException("Error executing command");
+		}
 		if (command.getErrorContents().length > 1) {
 			command.setStatus(ProcessCode.FAILURE);
 		} else {
@@ -132,19 +147,26 @@ public class ConsoleUtilities {
 	 * Method will execute a system command. Error stream is not a failure
 	 * criterion.
 	 * 
-	 * @param command A command object to execute
+	 * @param command
+	 *            A command object to execute
 	 * @return command the command with it's execution details set.
-	 * @throws IOException when the process builder cannot execute the command
+	 * @throws IOException
+	 *             when the process builder cannot execute the command
+	 * @throws SystemInteractionException
 	 */
 	public static Command execDisregardingErrorStream(final Command command)
-			throws IOException, InterruptedException {
+			throws SystemInteractionException {
 		checkParam(command.getCommand());
 		String cmdParts[] = command.getCommand().split(" ");
 		s_builder.command(cmdParts);
-		Process process = s_builder.start();
-		process.waitFor();
-		command.setOutput(gobbleOutputStream(process));
-		command.setErrorContents(gobbleErrorStream(process));
+		try {
+			Process process = s_builder.start();
+			process.waitFor();
+			command.setOutput(gobbleOutputStream(process));
+			command.setErrorContents(gobbleErrorStream(process));
+		} catch (IOException | InterruptedException e) {
+			throw new SystemInteractionException("Error executing command");
+		}
 		return command;
 	}
 
@@ -154,18 +176,25 @@ public class ConsoleUtilities {
 	 * Method will execute a system command. Reads streams before process
 	 * finishes. May result in race conditions.
 	 * 
-	 * @param command A command object to execute
+	 * @param command
+	 *            A command object to execute
 	 * @return command the command with it's execution details set.
-	 * @throws IOException when the process builder cannot execute the command
+	 * @throws IOException
+	 *             when the process builder cannot execute the command
+	 * @throws SystemInteractionException
 	 */
-	public static Command execUnSafe(final Command command) throws IOException,
-			InterruptedException {
+	public static Command execUnSafe(final Command command)
+			throws SystemInteractionException {
 		checkParam(command.getCommand());
 		String cmdParts[] = command.getCommand().split(" ");
 		s_builder.command(cmdParts);
-		Process process = s_builder.start();
-		command.setOutput(gobbleOutputStream(process));
-		command.setErrorContents(gobbleErrorStream(process));
+		try {
+			Process process = s_builder.start();
+			command.setOutput(gobbleOutputStream(process));
+			command.setErrorContents(gobbleErrorStream(process));
+		} catch (IOException e) {
+			throw new SystemInteractionException("Error executing command");
+		}
 		if (command.getErrorContents().length > 0) {
 			command.setStatus(ProcessCode.FAILURE);
 		} else {
@@ -181,18 +210,25 @@ public class ConsoleUtilities {
 	 * finishes. May result in race conditions. Disregards Error stream as a
 	 * criterion.
 	 * 
-	 * @param command A command object to execute
+	 * @param command
+	 *            A command object to execute
 	 * @return command the command with it's execution details set.
-	 * @throws IOException when the process builder cannot execute the command
+	 * @throws SystemInteractionException
+	 * @throws IOException
+	 *             when the process builder cannot execute the command
 	 */
 	public static Command execUnSafeDisregardingErrorStream(
-			final Command command) throws IOException, InterruptedException {
+			final Command command) throws SystemInteractionException {
 		checkParam(command.getCommand());
 		String cmdParts[] = command.getCommand().split(" ");
 		s_builder.command(cmdParts);
-		Process process = s_builder.start();
-		command.setOutput(gobbleOutputStream(process));
-		command.setErrorContents(gobbleErrorStream(process));
+		try {
+			Process process = s_builder.start();
+			command.setOutput(gobbleOutputStream(process));
+			command.setErrorContents(gobbleErrorStream(process));
+		} catch (IOException e) {
+			throw new SystemInteractionException("Error executing command");
+		}
 		return command;
 	}
 
@@ -201,20 +237,22 @@ public class ConsoleUtilities {
 	/**
 	 * Write to standard output.
 	 * 
-	 * @param message the string to output
+	 * @param message
+	 *            the string to output
 	 */
 	// TODO: add verification
 	public static void sOut(final String message) {
 		checkParam(message);
 		System.out.println(message);
 	}
-	
+
 	/* ******************************************************** */
 
 	/**
 	 * Write to standard output. No newline character.
 	 * 
-	 * @param message the string to output
+	 * @param message
+	 *            the string to output
 	 */
 	// TODO: add verification
 	public static void sDump(final String message) {
@@ -227,7 +265,8 @@ public class ConsoleUtilities {
 	/**
 	 * Write to standard error.
 	 * 
-	 * @param message the string to output
+	 * @param message
+	 *            the string to output
 	 */
 	// TODO: add verification
 	public static void sErr(final String message) {
@@ -242,7 +281,8 @@ public class ConsoleUtilities {
 	 * provides more flexibility.
 	 * 
 	 * @return inputVal a string containing the values the user input
-	 * @throws IOException when the input stream could not be read.
+	 * @throws IOException
+	 *             when the input stream could not be read.
 	 */
 	public static String sIn() throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
