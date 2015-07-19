@@ -8,11 +8,12 @@
 
 3. Writing and reading to files should be a lot simpler in Java.
 
-This package solves these problems by providing neat little portable helper classers that will work almost anywhere. 
+This package solves these problems by providing neat little portable helper classers that will work almost anywhere.
 
 This project uses Maven. I feel the project has pretty neat javadoc
 
 ## Todo:
+
 1. Write unit tests
 
 2. Enable checkstyle and static code analysis
