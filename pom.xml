@@ -3,8 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.srinivas</groupId>
-  <artifactId>systemutils</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <artifactId>JSSI</artifactId>
+  <version>stable</version>
   <packaging>jar</packaging>
 
   <name>systemutils</name>
@@ -15,18 +15,17 @@
   </properties>
 
   <dependencies>
-  
     <dependency>
       <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
+	    <artifactId>junit</artifactId>
+	    <version>4.12</version>
+	  </dependency>
+
     <dependency>
-	  <groupId>org.apache.commons</groupId>
-	  <artifactId>commons-io</artifactId>
-	  <version>1.3.2</version>
-    </dependency>
-    
+  	  <groupId>org.apache.commons</groupId>
+  	  <artifactId>commons-io</artifactId>
+  	  <version>1.3.2</version>
+    </dependency>    
   </dependencies>
+  
 </project>

@@ -1,6 +1,6 @@
 # Java Standard System Interactions
 
-This is a small library meant to ease 3 main things
+## This is a small library meant to ease 3 main things
 
 1. Writing to and reading from the console shouldn't be so complicated.
 
@@ -12,7 +12,7 @@ This package solves these problems by providing neat little portable helper clas
 
 This project uses Maven. I feel the project has pretty neat javadoc
 
-Todo:
+## Todo:
 1. Write unit tests
 
 2. Enable checkstyle and static code analysis

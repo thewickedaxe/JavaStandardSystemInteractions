@@ -10,16 +10,16 @@ package com.srinivas.systemutils.exceptions;
  */
 public class SystemInteractionException extends Exception {
 
-	/**
-	 * Serial ID.
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * Serial ID.
+     */
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Generic Exception type to log.
-	 */
-	public SystemInteractionException(final String message) {
-		super(message);
-	}
+    /**
+     * Generic Exception type to log.
+     */
+    public SystemInteractionException(final String message) {
+        super(message);
+    }
 
 }
