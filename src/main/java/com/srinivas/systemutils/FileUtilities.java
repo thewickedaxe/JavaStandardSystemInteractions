@@ -20,59 +20,6 @@ import com.srinivas.systemutils.exceptions.SystemInteractionException;
 public class FileUtilities {
 
     private static PrintWriter s_writer;
-
-<<<<<<< HEAD
-    /* ******************************************************** */
-    /**
-     * Writes to a file.
-     * 
-     * @param path path to file to write to.
-     * @param message content to write to file
-     * @throws FileNotFoundException when the required file doesn't exist.
-     */
-    public static void writeToFile(final String path, final String message)
-            throws FileNotFoundException {
-        s_writer = new PrintWriter(path);
-        s_writer.println(message);
-        s_writer.close();
-    }
-
-    /* ******************************************************** */
-    /**
-     * Appends to a file.
-     * 
-     * @param path path to file to write to.
-     * @param message content to write to file
-     * @throws FileNotFoundException when the required file doesn't exist.
-     */
-    public static void appendToFile(final String path, final String message)
-            throws FileNotFoundException {
-        s_writer = new PrintWriter(new FileOutputStream(path, true));
-        s_writer.println(message);
-        s_writer.close();
-    }
-
-    /* ******************************************************** */
-    /**
-     * Read from a file.
-     * 
-     * @param path path to file to write to.
-     * @throws IOException when the file culd not be read
-     * @return an Array of newline separated strings with the file contents
-     */
-    public static String[] readFromFile(final String path)
-            throws IOException {
-        String fileContentsDump = null;
-        FileInputStream inputStream = new FileInputStream(path);
-        try {
-            fileContentsDump = IOUtils.toString(inputStream);
-        } finally {
-            inputStream.close();
-        }
-        String contents[] = fileContentsDump.split("\n");
-        return contents;
-    }
-=======
 	/* ******************************************************** */
 	/**
 	 * Writes to a file.
@@ -146,5 +93,4 @@ public class FileUtilities {
 		String contents[] = fileContentsDump.split("\n");
 		return contents;
 	}
->>>>>>> 6a2e8bfcd7ece38dcf3df156e616f911e2c8e39a
 }
